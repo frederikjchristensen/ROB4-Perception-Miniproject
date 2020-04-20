@@ -45,19 +45,6 @@ def spoonspotter():
     #opening = cv2.morphologyEx(contour_mask, cv2.MORPH_OPEN, kernel_small)
     
     
-    # Calculate Moments
-    moments = cv2.moments(contour_mask_spoon)
-    # Calculate Hu Moments
-    huMoments = cv2.HuMoments(moments)
-    # Log scale hu moments
-    #print("SPOON")
-    for i in range(0,7):
-        huMomentsRef[i] = -1* copysign(1.0, huMoments[i]) * log10(abs(huMoments[i]))
-      #  print(huMomentsRef[i])
-    
-    cv2.namedWindow("Spoon", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-    cv2.resizeWindow("Spoon", spoon.shape[0], spoon.shape[1])  
-    cv2.imshow("Spoon", spoon)
 
 def spatulaspotter():
     ret,thresh = cv2.threshold(spatulagray,127,255,0)
@@ -66,25 +53,7 @@ def spatulaspotter():
     cv2.drawContours(spatula, contours, -1, (255,255,255), cv2.FILLED)
     global contour_mask_spatula
     contour_mask_spatula = cv2.inRange(spatula, (255, 255, 255), (255, 255, 255))
-    
-    #kernel_small = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (6, 6)) 
-    #Apply Opening (Noise removal)
-    #opening = cv2.morphologyEx(contour_mask, cv2.MORPH_OPEN, kernel_small)
-    
-    
-    # Calculate Moments
-    moments = cv2.moments(contour_mask_spatula)
-    # Calculate Hu Moments
-    huMoments = cv2.HuMoments(moments)
-    # Log scale hu moments
-    #print("SPOON")
-    for i in range(0,7):
-        huMomentsRef[i] = -1* copysign(1.0, huMoments[i]) * log10(abs(huMoments[i]))
-      #  print(huMomentsRef[i])
-    
-    cv2.namedWindow("Spatula", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-    cv2.resizeWindow("Spatula", spatula.shape[0], spatula.shape[1])  
-    cv2.imshow("Spatula", spatula)
+
 
 
 def whiskerspotter():
@@ -104,19 +73,6 @@ def whiskerspotter():
     erosion = cv2.morphologyEx(dilation, cv2.MORPH_ERODE, kernel_large)
     contour_mask_whisker = erosion
     
-    # Calculate Moments
-    moments = cv2.moments(contour_mask_whisker)
-    # Calculate Hu Moments
-    huMoments = cv2.HuMoments(moments)
-    # Log scale hu moments
-    #print("SPOON")
-    for i in range(0,7):
-        huMomentsRef[i] = -1* copysign(1.0, huMoments[i]) * log10(abs(huMoments[i]))
-      #  print(huMomentsRef[i])
-    
-    cv2.namedWindow("Whisker", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-    cv2.resizeWindow("Whisker", whisker.shape[0], whisker.shape[1])  
-    cv2.imshow("Whisker", whisker)
 
 def meatforkspotter():
     ret,thresh = cv2.threshold(meatforkgray,127,255,0)
@@ -135,15 +91,6 @@ def meatforkspotter():
     erosion = cv2.morphologyEx(dilation, cv2.MORPH_ERODE, kernel_large)
     contour_mask_meatfork = erosion
     
-    # Calculate Moments
-    moments = cv2.moments(contour_mask_meatfork)
-    # Calculate Hu Moments
-    huMoments = cv2.HuMoments(moments)
-    # Log scale hu moments
-    #print("SPOON")
-    for i in range(0,7):
-        huMomentsRef[i] = -1* copysign(1.0, huMoments[i]) * log10(abs(huMoments[i]))
-      #  print(huMomentsRef[i])
     
     
 def scissorspotter():
@@ -163,20 +110,6 @@ def scissorspotter():
     erosion = cv2.morphologyEx(dilation, cv2.MORPH_ERODE, kernel_large)
     contour_mask_scissor = erosion
     
-    # Calculate Moments
-    moments = cv2.moments(contour_mask_scissor)
-    # Calculate Hu Moments
-    huMoments = cv2.HuMoments(moments)
-    # Log scale hu moments
-    #print("SPOON")
-    for i in range(0,7):
-        huMomentsRef[i] = -1* copysign(1.0, huMoments[i]) * log10(abs(huMoments[i]))
-      #  print(huMomentsRef[i])
-
-    cv2.namedWindow("Scissor", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-    cv2.resizeWindow("Scissor", scissor.shape[0], scissor.shape[1])  
-    cv2.imshow("Scissor", scissor)
-
 
 # MAIN CODE ###########################
 
@@ -226,11 +159,7 @@ for x in cnts:
     cv2.drawContours(compare, [x], -1, (0, 205, 255), cv2.FILLED)
     compare = cv2.inRange(compare, (0, 205, 255), (0, 205, 255))
     d1 = cv2.matchShapes(compare,contour_mask_spoon,cv2.CONTOURS_MATCH_I2,0)
-    #print("D1 %s", d1)
-    if (d1 < 0.02):
-        cv2.drawContours(colour, [x], -1, (255, 25, 25), 2)
-        cv2.putText(colour, "Spoon", (cX + 40, cY + 20),
-        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+
     
     #Spatula shape matching    
     spatulaspotter()
@@ -238,11 +167,7 @@ for x in cnts:
     cv2.drawContours(compare, [x], -1, (0, 205, 255), cv2.FILLED)
     compare = cv2.inRange(compare, (0, 205, 255), (0, 205, 255))
     d2 = cv2.matchShapes(compare,contour_mask_spatula,cv2.CONTOURS_MATCH_I2,0)
-    #print("D2 %s", d2)
-    if (d2 < 0.02):
-        cv2.drawContours(colour, [x], -1, (25, 25, 255), 2)
-        cv2.putText(colour, "Spatula", (cX + 40, cY + 20),
-        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+
         
     #Whisker shape matching    
     whiskerspotter()
@@ -250,11 +175,7 @@ for x in cnts:
     cv2.drawContours(compare, [x], -1, (0, 205, 255), cv2.FILLED)
     compare = cv2.inRange(compare, (0, 205, 255), (0, 205, 255))
     d3 = cv2.matchShapes(compare,contour_mask_whisker,cv2.CONTOURS_MATCH_I2,0)
-    if (d3 < 0.02):
-        cv2.drawContours(colour, [x], -1, (25, 255, 255), 2)
-        cv2.putText(colour, "Whisker", (cX + 40, cY + 20),
-        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
-        print("D3 %s", d3)
+
         
     #Meatfork shape matching    
     meatforkspotter()
@@ -262,11 +183,7 @@ for x in cnts:
     cv2.drawContours(compare, [x], -1, (0, 205, 255), cv2.FILLED)
     compare = cv2.inRange(compare, (0, 205, 255), (0, 205, 255))
     d4 = cv2.matchShapes(compare,contour_mask_meatfork,cv2.CONTOURS_MATCH_I2,0)
-    #print("D4 %s", d4)
-    if (d4 < 0.1): #Shape vastly different from others, so higher pass value allowed.
-        cv2.drawContours(colour, [x], -1, (25, 255, 255), 2)
-        cv2.putText(colour, "Meatfork", (cX + 40, cY + 20),
-        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+
         
     #Scissor shape matching    
     scissorspotter()
@@ -274,12 +191,35 @@ for x in cnts:
     cv2.drawContours(compare, [x], -1, (0, 205, 255), cv2.FILLED)
     compare = cv2.inRange(compare, (0, 205, 255), (0, 205, 255))
     d5 = cv2.matchShapes(compare,contour_mask_scissor,cv2.CONTOURS_MATCH_I2,0)
-    if (d5 < 0.01): #Shape is very generic, so a strict limit is set.
+
+    
+    
+    #Sorting classification
+    if (d1 < 0.15 and d1 < d2 and d1 < d3 and d1 < d4 and d1 < d5):
+        cv2.drawContours(colour, [x], -1, (255, 25, 25), 2)
+        cv2.putText(colour, "Spoon", (cX + 40, cY + 20),
+        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+    
+    if (d2 < 0.15 and d2 < d1 and d2 < d3 and d2 < d4 and d2 < d5):
+        cv2.drawContours(colour, [x], -1, (25, 25, 255), 2)
+        cv2.putText(colour, "Spatula", (cX + 40, cY + 20),
+        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+    
+    if (d3 < 0.15 and d3 < d1 and d3 < d2 and d3 < d4 and d3 < d5):
+        cv2.drawContours(colour, [x], -1, (25, 255, 255), 2)
+        cv2.putText(colour, "Whisker", (cX + 40, cY + 20),
+        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+    
+    if (d4 < 0.15 and d4 < d1 and d4 < d2 and d4 < d3 and d4 < d5): 
+        cv2.drawContours(colour, [x], -1, (25, 255, 255), 2)
+        cv2.putText(colour, "Meatfork", (cX + 40, cY + 20),
+        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+    
+    if (d5 < 0.15 and d5 < d1 and d5 < d2 and d5 < d3 and d5 < d4): 
         cv2.drawContours(colour, [x], -1, (25, 255, 255), 2)
         cv2.putText(colour, "Scissor", (cX + 40, cY + 20),
         cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
-        print("D5 %s", d5)
-
+    
     
     # draw the contour and center of the shape on the image
     #cv2.drawContours(colour, [x], -1, (0, 255, 0), 2)
@@ -288,20 +228,10 @@ for x in cnts:
 	cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
 
-cv2.namedWindow("Grayscale", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions   
-cv2.resizeWindow("Grayscale", gray.shape[0], gray.shape[1])     
+  
 cv2.namedWindow("Colour", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-cv2.resizeWindow("Colour", gray.shape[0], gray.shape[1])    
-cv2.imshow("Grayscale", gray)
+cv2.resizeWindow("Colour", gray.shape[0], gray.shape[1])
 cv2.imshow("Colour", colour)
-
-cv2.namedWindow("test", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-cv2.resizeWindow("test", gray.shape[0], gray.shape[1])  
-cv2.imshow("test", contour_mask_spoon)
-
-cv2.namedWindow("test2", cv2.WINDOW_NORMAL)        # Create window with freedom of dimensions    
-cv2.resizeWindow("test2", gray.shape[0], gray.shape[1])  
-cv2.imshow("test2", compare)
 
 
 
