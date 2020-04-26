@@ -29,6 +29,8 @@ whisker = cv2.imread('references/whisker.jpg', cv2.IMREAD_UNCHANGED)
 whiskergray = cv2.imread('references/whisker.jpg', cv2.IMREAD_GRAYSCALE)
 
 
+
+
 huMomentsRef = [0]*7   #Holder for reference values
 #huMomentsContour = [0]*7 #Holder for current contour values
 
